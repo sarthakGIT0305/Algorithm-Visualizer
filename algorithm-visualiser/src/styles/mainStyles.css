@@ -1,0 +1,130 @@
+body {
+    font-family: 'Fira Code';
+    background-color: #3F1D38;
+    margin: 0;
+    padding: 0;
+}
+
+* {
+    padding: 0;
+    /* height: 100%; */
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* TopHeader */
+
+.main-header {
+    background-color: #E19898;
+    padding: 0.7rem;
+    margin-bottom: 0;
+    /* justify-content: center; */
+}
+
+.top-header { 
+    /* background-color: white; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* margin: 0.3rem; */
+    margin-bottom: 0.5rem;
+}
+
+.top-header .bird-icon {
+    height: 3rem;
+    margin: 0.5rem;
+}
+
+.top-header .main-title {
+    font-size: 2rem;
+    color: #3F1D38;
+    margin: 0.5rem;
+    padding: 0;
+}
+
+.nav-bar {
+    background-color: #4D3C77;
+    margin: 0 auto;
+    border-radius: 4rem;
+    justify-content: space-evenly;
+    /* height: 3rem; */
+    /* justify-content: space-between; */
+    gap: 4rem;
+    display: flex;
+    align-items: center;
+    /* font-family: 'Fira Code'; */
+    width: fit-content;
+    padding: 0.8rem 3rem;
+}
+
+.nav-bar .tab-link {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+    /* margin: 1rem 4rem; */
+    /* padding: 0.5rem 1rem; */
+    /* border-radius: 6px; */
+}
+
+/* .tab-link.active {
+  /* background-color: #E19898; */
+/* color: #3F1D38;
+} */
+
+/* Sorting Visualizer */
+
+.sorting-visualizer {
+    background-color: white;
+    margin: 2vh;
+    /* display:flex; */
+    /* flex:1; */
+    /* flex-direction: column; */
+    border-radius: 1rem;
+    padding: 2.1vh;
+    overflow: auto;
+    /* min-height: 79vh; */
+}
+
+.bar-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 4px;
+  padding: 1rem;
+  background-color: #3F1D38;
+  /* height: 300px; */
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  /* height :100px; */
+}
+
+.bar {
+  background-color: #A2678A;
+  /* height: 100px;   */
+  /* Will be overwritten by inline style */
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: clamp(0.5rem, 1.5vw, 2rem); /* 👈 responsive width */
+  /* transition: height 0.3s ease, background-color 0.3s ease; */
+}
+
+.console-controls {
+  margin: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  background-color: red;
+}
+
+.console-controls button,
+.console-controls input[type='range'] {
+  background-color: #3F1D38;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-family: 'Fira Code', monospace;
+}
