@@ -1,12 +1,14 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import mainIcon from '/src/assets/mainIconBirb.svg';
 
 function TopHeader() {
     return (
         <nav className='main-header'>
             <nav className='top-header'>
-                <img className='bird-icon' src="./src/assets/mainIconBirb.svg" />
+                <img src={mainIcon} alt="icon" className='bird-icon'/>
+                {/* <img className='bird-icon' src="./src/assets/mainIconBirb.svg" /> */}
                 <h1 className='main-title'>Algorithm Visualizer</h1>
             </nav>
             <NavigationBar />

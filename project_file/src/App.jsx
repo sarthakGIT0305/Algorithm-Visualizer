@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import SortingVisualizer from './components/SortingVisualizer.jsx';
 import GraphVisualizer from './components/GraphVisualizer';
 import TreeVisualizer from './components/TreeVisualizer';
+import './styles/mainStyles.css';
 
 function App() {
     return (
