@@ -2,6 +2,10 @@
 
 An interactive web application that brings computer science algorithms to life through real-time visual demonstrations. Built with React and modern web technologies, this tool provides an engaging way to understand and explore sorting algorithms, graph traversals, and tree operations.
 
+## 🔗 [**Live Demo**](https://algorithm-visualizer-kappa-two.vercel.app/)
+
+Experience the visualizer in action! Click the link above to interact with sorting algorithms in real-time.
+
 ## 🚀 Features
 
 ### Sorting Algorithms
@@ -61,12 +65,14 @@ An interactive web application that brings computer science algorithms to life t
 
 ## 🎮 Usage
 
-1. **Select Algorithm**: Choose from available sorting algorithms
-2. **Configure Array**: Adjust array length using the slider
-3. **Set Speed**: Control animation speed for better understanding
-4. **Generate Array**: Create a new random array
-5. **Visualize**: Click "Sort" to watch the algorithm in action
-6. **Compare**: Monitor original vs. sorted array states
+1. **Navigate to [Live Demo](https://algorithm-visualizer-kappa-two.vercel.app/)**
+2. **Select Algorithm**: Choose from Bubble Sort, Insertion Sort, Merge Sort, or Quick Sort
+3. **Configure Array**: Adjust array length (1-100 elements) using the slider
+4. **Set Speed**: Control animation speed (10ms-1000ms) for optimal viewing
+5. **Generate Array**: Create a new random array with current settings
+6. **Visualize**: Click "Sort" to watch the algorithm transform the array
+7. **Monitor Progress**: Compare original vs. current array states in real-time
+8. **Explore**: Use navigation tabs to visit upcoming Graph and Tree sections
 
 ## 🏗️ Project Structure
 
@@ -121,8 +127,14 @@ Each sorting algorithm is implemented with:
 
 ## 🚀 Deployment
 
-The application is optimized for deployment on modern hosting platforms:
+The application is live and optimized for production:
 
+- **✅ Live on Vercel**: [algorithm-visualizer-kappa-two.vercel.app](https://algorithm-visualizer-kappa-two.vercel.app/)
+- **⚡ Fast Loading**: Optimized build with Vite
+- **📱 Mobile Responsive**: Works across all device sizes
+- **🌐 Global CDN**: Fast access worldwide
+
+### Deploy Your Own
 - **Vercel**: Zero-configuration deployment
 - **Netlify**: Static site hosting
 - **GitHub Pages**: Free hosting option
