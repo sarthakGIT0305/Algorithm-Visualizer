@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import ReactFlow, {
     useNodesState,
     useEdgesState,
@@ -25,74 +25,72 @@ function TreeVisualizer() {
     const [isAnimating, setIsAnimating] = useState(false);
     const [speed, setSpeed] = useState(250);
     const [selectedAlgo, setSelectedAlgo] = useState('bfs');
-    const { getNodes } = useReactFlow();
+    const [nodeInputValue, setNodeInputValue] = useState('');
+    const [traversalRootId, setTraversalRootId] = useState('');
+    const { getNodes, screenToFlowPosition } = useReactFlow();
+
+    useEffect(() => {
+        // Set the first node as the default traversal root when nodes are added
+        if (nodes.length > 0 && !traversalRootId) {
+            setTraversalRootId(nodes[0].id);
+        }
+        // If the selected root is deleted, reset it to the first node
+        if (nodes.length > 0 && !nodes.some(n => n.id === traversalRootId)) {
+            setTraversalRootId(nodes[0].id);
+        }
+        if (nodes.length === 0) {
+            setTraversalRootId('');
+        }
+    }, [nodes, traversalRootId]);
 
     const addNodeToTree = useCallback((value) => {
         const newNodeId = String(nodes.length + 1);
-        let newNode;
+        
+        // Position the new node in the center of the view
+        const position = screenToFlowPosition({ 
+            x: window.innerWidth / 2, 
+            y: window.innerHeight / 3 
+        });
 
-        if (nodes.length === 0) {
-            // Add the root node
-            newNode = {
-                id: newNodeId,
-                type: 'circular',
-                position: { x: 0, y: 0 },
-                data: { label: value },
-            };
-            setNodes([newNode]);
-            return;
-        }
-
-        // Find the parent and position for the new node (simple binary tree logic)
-        let parentNode = nodes[Math.floor((nodes.length - 1) / 2)];
-        const isLeftChild = nodes.length % 2 !== 0;
-
-        const xOffset = 100;
-        const yOffset = 100;
-
-        newNode = {
+        const newNode = {
             id: newNodeId,
             type: 'circular',
-            position: {
-                x: parentNode.position.x + (isLeftChild ? -xOffset : xOffset),
-                y: parentNode.position.y + yOffset,
-            },
+            position,
             data: { label: value },
         };
 
-        const newEdge = {
-            id: `e${parentNode.id}-${newNodeId}`,
-            source: parentNode.id,
-            target: newNodeId,
-            animated: false,
-        };
-
         setNodes((nds) => [...nds, newNode]);
-        setEdges((eds) => [...eds, newEdge]);
 
-    }, [nodes, setNodes, setEdges]);
+    }, [nodes.length, setNodes, screenToFlowPosition]);
 
     const handleAddNode = () => {
-        const value = Math.floor(Math.random() * 100);
+        const value = parseInt(nodeInputValue, 10);
+        if (isNaN(value)) {
+            // Reverted alert to a console log to avoid breaking the UI in some environments.
+            console.error("Please enter a valid number.");
+            return;
+        }
         addNodeToTree(value);
+        setNodeInputValue(''); // Clear input after adding
     };
     
     const handleRunTraversal = async () => {
-        if (isAnimating || nodes.length === 0) return;
+        if (isAnimating || nodes.length === 0 || !traversalRootId) return;
         setIsAnimating(true);
         setVisitedOrder([]);
 
         const allNodes = getNodes();
         
-        // Build adjacency list from edges
+        // Build an UNDIRECTED adjacency list from edges
         const adj = {};
         allNodes.forEach(node => adj[node.id] = []);
         edges.forEach(edge => {
             adj[edge.source].push(edge.target);
+            adj[edge.target].push(edge.source); // This makes the graph undirected
         });
 
         const traversalFunction = selectedAlgo === 'bfs' ? runBFS : runDFS;
-        await traversalFunction(adj, allNodes[0].id, setVisitedOrder, speed);
+        await traversalFunction(adj, traversalRootId, setVisitedOrder, speed);
         
         setIsAnimating(false);
     };
@@ -102,21 +100,25 @@ function TreeVisualizer() {
         setEdges([]);
         setVisitedOrder([]);
         setIsAnimating(false);
+        setNodeInputValue('');
     };
     
     const getNodeClassName = (nodeId) => {
         let className = 'node-default';
         if (visitedOrder.includes(nodeId)) {
-            const index = visitedOrder.indexOf(nodeId);
-            // Stagger the animation effect
-            if (index === visitedOrder.length - 1 && isAnimating) {
-                 className = 'node-visited';
-            } else if (index < visitedOrder.length -1) {
-                 className = 'node-visited';
-            }
+            // Corrected logic: always apply 'node-visited' if the node is in the order.
+            className = 'node-visited';
+        }
+        if (nodeId === traversalRootId) {
+            className += ' node-start';
         }
         return className;
     };
+
+    // Callback to create straight edges
+    const onConnect = useCallback((params) => {
+        setEdges((eds) => addEdge({ ...params, type: 'straight', animated: false }, eds));
+    }, [setEdges]);
 
 
     return (
@@ -124,7 +126,24 @@ function TreeVisualizer() {
             <h2 className="visualizer-title">🌲 Tree Traversal Visualizer</h2>
             
             <div className="tree-controls">
-                <button onClick={handleAddNode} disabled={isAnimating}>Add Node</button>
+                <div className="input-group">
+                    <input
+                        type="number"
+                        value={nodeInputValue}
+                        onChange={(e) => setNodeInputValue(e.target.value)}
+                        placeholder="Node Value"
+                        disabled={isAnimating}
+                    />
+                    <button onClick={handleAddNode} disabled={isAnimating || !nodeInputValue}>Add Node</button>
+                </div>
+
+                <label>
+                    Traversal Root:
+                    <select value={traversalRootId} onChange={(e) => setTraversalRootId(e.target.value)} disabled={isAnimating || nodes.length === 0}>
+                        {nodes.map(node => <option key={node.id} value={node.id}>{node.data.label}</option>)}
+                    </select>
+                </label>
+
                 <select value={selectedAlgo} onChange={(e) => setSelectedAlgo(e.target.value)} disabled={isAnimating}>
                     <option value="bfs">Breadth-First Search (BFS)</option>
                     <option value="dfs">Depth-First Search (DFS)</option>
@@ -153,7 +172,7 @@ function TreeVisualizer() {
                     edges={edges}
                     onNodesChange={onNodesChange}
                     onEdgesChange={onEdgesChange}
-                    onConnect={useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges])}
+                    onConnect={onConnect}
                     nodeTypes={nodeTypes}
                     fitView
                 >
