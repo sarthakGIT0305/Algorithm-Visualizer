@@ -13,8 +13,8 @@ import { runDijkstra } from '../algorithms/graph/dijkstra.jsx';
 import CircularNode from './CircularNode.jsx';
 import EditableEdge from './EditableEdge.jsx';
 import PriorityQueueDisplay from './PriorityQueueDisplay.jsx';
+import '../styles/graphs.css'; // Import the new stylesheet
 
-// These objects are now defined outside of the component to fix the React Flow warning
 const nodeTypes = { circular: CircularNode };
 const edgeTypes = { editable: EditableEdge };
 
@@ -83,7 +83,6 @@ function GraphVisualizer() {
         );
     }, [setEdges]);
 
-    // Corrected function call: passing setQueueState
     const handleRunDijkstra = async () => {
         if (!startNode || !endNode || startNode === endNode) {
             alert('Please select valid and different start and end nodes.');
@@ -102,7 +101,6 @@ function GraphVisualizer() {
             graph[edge.source][edge.target] = weight;
         });
 
-        // Pass the correct state setter: setQueueState
         await runDijkstra(graph, startNode, endNode, setPath, setVisited, setQueueState, speed);
         setIsAnimating(false);
     };
@@ -119,45 +117,25 @@ function GraphVisualizer() {
         setQueueState([]);
     };
 
-    const styledNodes = nodes.map(node => ({
-        ...node,
-        style: {
-            ...node.style,
-            backgroundColor: path.includes(node.id)
-                ? '#E19898'
-                : visited.includes(node.id)
-                    ? '#A2678A'
-                    : '#4D3C77',
-            color: 'white',
-            borderColor: (startNode === node.id || endNode === node.id) ? '#F1E8C8' : '#A2678A',
-            borderWidth: (startNode === node.id || endNode === node.id) ? 3 : 2,
-        },
-    }));
+    const getNodeClassName = (nodeId) => {
+        let className = 'node-default';
+        if (path.includes(nodeId)) className = 'node-path';
+        else if (visited.includes(nodeId)) className = 'node-visited';
+        
+        if (nodeId === startNode) className += ' node-start';
+        if (nodeId === endNode) className += ' node-end';
+        
+        return className;
+    };
 
-    const styledEdges = edges.map(edge => {
-        const isPathEdge = path.includes(edge.source) && path.includes(edge.target);
-        return {
-            ...edge,
-            animated: isPathEdge && isAnimating,
-            style: {
-                ...edge.style,
-                stroke: isPathEdge ? '#E19898' : '#A2678A',
-                strokeWidth: isPathEdge ? 3 : 1,
-            },
-            data: {
-                ...edge.data,
-                onWeightChange: handleEdgeWeightChange,
-            },
-            markerEnd: {
-                type: 'arrowclosed',
-                color: isPathEdge ? '#E19898' : '#A2678A',
-            },
-        };
-    });
+    const getEdgeClassName = (edge) => {
+        const isPathEdge = path.includes(edge.source) && path.includes(edge.target) && path.indexOf(edge.target) === path.indexOf(edge.source) + 1;
+        return isPathEdge ? 'edge-path' : 'edge-default';
+    };
 
     return (
         <div className="graph-visualizer-container">
-            <h2>🧭 Graph Visualizer</h2>
+            <h2 className="visualizer-title">🧭 Graph Visualizer</h2>
             
             <div className="graph-controls">
                 <button onClick={onAddNode} disabled={isAnimating}>Add Node</button>
@@ -184,6 +162,7 @@ function GraphVisualizer() {
                         step="10"
                         value={speed}
                         onChange={(e) => setSpeed(Number(e.target.value))}
+                        disabled={isAnimating}
                     />
                 </label>
                 <button onClick={handleRunDijkstra} disabled={isAnimating || !startNode || !endNode}>
@@ -194,8 +173,8 @@ function GraphVisualizer() {
             
             <div className="react-flow-wrapper">
                 <ReactFlow
-                    nodes={styledNodes}
-                    edges={styledEdges}
+                    nodes={nodes.map(n => ({...n, className: getNodeClassName(n.id)}))}
+                    edges={edges.map(e => ({...e, className: getEdgeClassName(e), animated: getEdgeClassName(e) === 'edge-path' && isAnimating, data: {...e.data, onWeightChange: handleEdgeWeightChange}}))}
                     onNodesChange={onNodesChange}
                     onEdgesChange={onEdgesChange}
                     onConnect={onConnect}

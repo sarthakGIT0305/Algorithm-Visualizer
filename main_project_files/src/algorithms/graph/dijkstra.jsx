@@ -1,8 +1,29 @@
 // A utility function for the sleep delay
 export const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+// A simple Priority Queue implementation for Dijkstra's algorithm
+class PriorityQueue {
+  constructor() {
+    this.values = [];
+  }
+  enqueue(node, priority) {
+    this.values.push({ node, priority });
+    this.sort();
+  }
+  dequeue() {
+    return this.values.shift();
+  }
+  sort() {
+    this.values.sort((a, b) => a.priority - b.priority);
+  }
+  isEmpty() {
+    return this.values.length === 0;
+  }
+}
+
 /**
  * Runs Dijkstra's algorithm to find the shortest path between two nodes in a graph.
+ * This version uses a more explicit priority queue for clarity and correctness.
  *
  * @param {object} graph - The graph represented as an adjacency list.
  * @param {string} startNodeId - The ID of the starting node.
@@ -13,66 +34,77 @@ export const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
  * @param {number} speed - The speed of the animation in milliseconds.
  */
 export const runDijkstra = async (graph, startNodeId, endNodeId, setPath, setVisited, setQueue, speed) => {
+  // Create an undirected representation of the graph to ensure bidirectional paths.
+  const undirectedGraph = JSON.parse(JSON.stringify(graph));
+  for (const node in graph) {
+    for (const neighbor in graph[node]) {
+      undirectedGraph[neighbor][node] = graph[node][neighbor];
+    }
+  }
+
   const distances = {};
   const previous = {};
-  const unvisitedNodes = new Set(Object.keys(graph));
-  
-  for (let node in graph) {
-    distances[node] = Infinity;
+  const pq = new PriorityQueue();
+  const visitedNodes = new Set();
+
+  // Initialize distances and priority queue using the undirected graph
+  for (let node in undirectedGraph) {
+    if (node === startNodeId) {
+      distances[node] = 0;
+      pq.enqueue(node, 0);
+    } else {
+      distances[node] = Infinity;
+      pq.enqueue(node, Infinity);
+    }
+    previous[node] = null;
   }
-  distances[startNodeId] = 0;
 
-  let pathFound = false;
+  // Update the visual queue display initially
+  setQueue(pq.values.map(item => ({ node: item.node, distance: item.priority })));
+  await sleep(speed);
 
-  while (unvisitedNodes.size > 0) {
-    const queueArray = Array.from(unvisitedNodes)
-        .map(node => ({ node, distance: distances[node] }))
-        .sort((a, b) => a.distance - b.distance);
-    setQueue([...queueArray]);
+  while (!pq.isEmpty()) {
+    const { node: currentNode } = pq.dequeue();
 
-    let minDistance = Infinity;
-    let closestNodeId = null;
-
-    for (const node of unvisitedNodes) {
-      if (distances[node] < minDistance) {
-        minDistance = distances[node];
-        closestNodeId = node;
-      }
-    }
-    
-    if (closestNodeId === null || minDistance === Infinity) {
-      break;
-    }
-
-    setVisited(prev => [...prev, closestNodeId]);
-    await sleep(speed); // Use the speed parameter here
-
-    if (closestNodeId === endNodeId) {
-      pathFound = true;
-      let current = endNodeId;
+    // If we reached the end node, we are done.
+    if (currentNode === endNodeId) {
       const shortestPath = [];
-      while (current) {
-        shortestPath.unshift(current);
-        current = previous[current];
+      let tempNode = endNodeId;
+      while (tempNode) {
+        shortestPath.unshift(tempNode);
+        tempNode = previous[tempNode];
       }
       setPath(shortestPath);
-      setQueue([]);
-      break;
+      setQueue([]); // Clear the queue display
+      return; // End the algorithm
     }
 
-    for (let neighbor in graph[closestNodeId]) {
-      const weight = graph[closestNodeId][neighbor];
-      const newDistance = distances[closestNodeId] + weight;
+    // Process the node if it has a valid distance and hasn't been visited
+    if (currentNode && distances[currentNode] !== Infinity) {
+      if (!visitedNodes.has(currentNode)) {
+        visitedNodes.add(currentNode);
+        setVisited(prev => [...prev, currentNode]);
+        await sleep(speed);
 
-      if (newDistance < distances[neighbor]) {
-        distances[neighbor] = newDistance;
-        previous[neighbor] = closestNodeId;
+        // Relaxation step: check all neighbors using the undirected graph
+        for (let neighbor in undirectedGraph[currentNode]) {
+          const weight = undirectedGraph[currentNode][neighbor];
+          const newDistance = distances[currentNode] + weight;
+
+          if (newDistance < distances[neighbor]) {
+            distances[neighbor] = newDistance;
+            previous[neighbor] = currentNode;
+            // Update the priority in the queue
+            pq.enqueue(neighbor, newDistance);
+          }
+        }
+        // Update the visual queue display after processing neighbors
+        setQueue(pq.values.map(item => ({ node: item.node, distance: item.priority })));
       }
     }
-    unvisitedNodes.delete(closestNodeId);
   }
-  if (!pathFound) {
-    setPath([]);
-  }
+
+  // If the loop finishes and we haven't found the end node, no path exists
+  setPath([]); 
   setQueue([]);
 };

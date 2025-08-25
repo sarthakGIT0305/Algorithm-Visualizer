@@ -15,9 +15,22 @@ function App() {
             <main className='main-content'>
                 <Routes>
                     <Route path="/" element={<SortingVisualizer />} />
-                    {/* Wrap the GraphVisualizer component with ReactFlowProvider */}
-                    <Route path="/graphs" element={<ReactFlowProvider><GraphVisualizer /></ReactFlowProvider>} />
-                    <Route path="/trees" element={<TreeVisualizer />} />
+                    <Route 
+                        path="/graphs" 
+                        element={
+                            <ReactFlowProvider>
+                                <GraphVisualizer />
+                            </ReactFlowProvider>
+                        } 
+                    />
+                    <Route 
+                        path="/trees" 
+                        element={
+                            <ReactFlowProvider>
+                                <TreeVisualizer />
+                            </ReactFlowProvider>
+                        } 
+                    />
                 </Routes>
             </main>
             <BottomFooter />

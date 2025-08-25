@@ -3,7 +3,7 @@ import { Handle, Position } from 'reactflow';
 
 export default function CircularNode({ data }) {
     return (
-        <div className="circular-node-wrapper">
+        <>
             {/* Handles allow edges to connect to the node */}
             <Handle type="target" position={Position.Top} />
             <Handle type="target" position={Position.Left} />
@@ -13,6 +13,6 @@ export default function CircularNode({ data }) {
             <div className="circular-node-content">
                 {data.label}
             </div>
-        </div>
+        </>
     );
 }

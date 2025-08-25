@@ -47,8 +47,8 @@ export default function EditableEdge({
                 >
                     <input
                         type="number"
+                        className="edge-weight-input" // Added className here
                         value={data.weight || 1}
-                        style={{ width: '40px', textAlign: 'center' }}
                         onChange={handleWeightChange}
                         min="1"
                     />

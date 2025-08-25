@@ -1,0 +1,146 @@
+/* Styles for the Sorting Visualizer Component */
+
+.sorting-visualizer {
+  background-color: var(--mantle);
+  margin: 2vh;
+  border-radius: 1rem;
+  padding: 2.1vh;
+  overflow: auto;
+  border: 1px solid var(--surface0);
+}
+
+.visualizer-title {
+    color: var(--flamingo);
+    text-align: center;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.bar-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 4px;
+  padding: 1rem;
+  background-color: var(--base);
+  border-radius: 0.5rem;
+  min-height: 300px;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  border: 1px solid var(--surface0);
+}
+
+.bar {
+  background-color: var(--blue);
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: clamp(0.5rem, 1.5vw, 2rem);
+  transition: background-color 0.2s ease-out;
+}
+
+.bar-highlight {
+    background-color: var(--red);
+}
+
+.console-controls {
+  margin: 1.5rem 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.console-controls button,
+.console-controls select {
+  background-color: var(--surface0);
+  color: var(--text);
+  border: 1px solid var(--surface1);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-family: 'Fira Code', monospace;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.console-controls button:hover,
+.console-controls select:hover {
+    background-color: var(--surface1);
+}
+
+.console-controls button:disabled {
+    background-color: var(--surface0);
+    color: var(--overlay0);
+    cursor: not-allowed;
+}
+
+.console-controls label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--subtext1);
+}
+
+/* Custom styling for range inputs */
+.console-controls input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 150px;
+  height: 8px;
+  background: var(--surface0);
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid var(--surface1);
+}
+
+.console-controls input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--mauve);
+  cursor: pointer;
+  border-radius: 50%;
+  border: 2px solid var(--crust);
+}
+
+.console-controls input[type='range']::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--mauve);
+  cursor: pointer;
+  border-radius: 50%;
+  border: 2px solid var(--crust);
+}
+
+.console-outputs {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1.5rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.array-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 300px;
+}
+
+.array-box label {
+    color: var(--subtext0);
+    font-size: 0.9rem;
+}
+
+.array-box textarea {
+    background-color: var(--base);
+    color: var(--text);
+    border: 1px solid var(--surface0);
+    border-radius: 6px;
+    padding: 0.5rem;
+    font-family: 'Fira Code', monospace;
+    resize: none;
+    height: 60px;
+}

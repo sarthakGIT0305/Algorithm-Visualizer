@@ -1,10 +1,42 @@
+/* Catppuccin Mocha Theme Variables */
+:root {
+  --rosewater: #f5e0dc;
+  --flamingo: #f2cdcd;
+  --pink: #f5c2e7;
+  --mauve: #cba6f7;
+  --red: #f38ba8;
+  --maroon: #eba0ac;
+  --peach: #fab387;
+  --yellow: #f9e2af;
+  --green: #a6e3a1;
+  --teal: #94e2d5;
+  --sky: #89dceb;
+  --sapphire: #74c7ec;
+  --blue: #89b4fa;
+  --lavender: #b4befe;
+  --text: #cdd6f4;
+  --subtext1: #bac2de;
+  --subtext0: #a6adc8;
+  --overlay2: #9399b2;
+  --overlay1: #7f849c;
+  --overlay0: #6c7086;
+  --surface2: #585b70;
+  --surface1: #45475a;
+  --surface0: #313244;
+  --base: #1e1e2e;
+  --mantle: #181825;
+  --crust: #11111b;
+}
+
 body {
-  font-family: 'Fira Code';
-  background-color: #3F1D38;
+  font-family: 'Fira Code', monospace;
+  background-color: var(--base);
+  color: var(--text);
   margin: 0;
   height:100%;
   padding: 0;
 }
+
 html{
   height:100%;
 }
@@ -27,11 +59,11 @@ html{
 }
 
 /* TopHeader */
-
 .main-header {
-  background-color: #E19898;
+  background-color: var(--crust);
   padding: 0.7rem;
   margin-bottom: 0;
+  border-bottom: 1px solid var(--surface0);
 }
 
 .top-header {
@@ -48,13 +80,13 @@ html{
 
 .top-header .main-title {
   font-size: 2rem;
-  color: #3F1D38;
+  color: var(--mauve);
   margin: 0.5rem;
   padding: 0;
 }
 
 .nav-bar {
-  background-color: #4D3C77;
+  background-color: var(--mantle);
   margin: 0 auto;
   border-radius: 4rem;
   justify-content: space-evenly;
@@ -63,203 +95,40 @@ html{
   align-items: center;
   width: fit-content;
   padding: 0.8rem 3rem;
+  border: 1px solid var(--surface0);
 }
 
 .nav-bar .tab-link {
-  color: #fff;
+  color: var(--subtext1);
   text-decoration: none;
   font-weight: bold;
   font-size: 1.1rem;
+  transition: color 0.3s ease;
 }
 
-/* Sorting Visualizer */
-
-.sorting-visualizer {
-  background-color: white;
-  margin: 2vh;
-  border-radius: 1rem;
-  padding: 2.1vh;
-  overflow: auto;
-}
-
-.bar-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  gap: 4px;
-  padding: 1rem;
-  background-color: #3F1D38;
-  overflow-x: auto;
-  flex-wrap: nowrap;
-}
-
-.bar {
-  background-color: #A2678A;
-  flex-grow: 1;
-  flex-shrink: 1;
-  flex-basis: clamp(0.5rem, 1.5vw, 2rem);
-}
-
-.console-controls {
-  margin: 0.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-}
-
-.console-controls button,
-.console-controls input[type='range'] {
-  background-color: #3F1D38;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  font-family: 'Fira Code', monospace;
-}
-
-/* Graph Visualizer */
-.graph-visualizer-container {
-  display: flex;
-  flex-direction: column;
-  padding: 2.1vh;
-  margin: 2vh;
-  background-color: white;
-  border-radius: 1rem;
-  overflow: hidden;
-}
-
-.graph-controls {
-  margin: 1rem 0;
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.graph-controls select,
-.graph-controls button,
-.graph-controls label {
-  background-color: #3F1D38;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  font-family: 'Fira Code', monospace;
-  cursor: pointer;
-}
-
-.graph-controls label {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.graph-controls select {
-    padding: 0.4rem 0.8rem;
-    border-radius: 4px;
-    background-color: #4D3C77;
-    color: white;
-}
-
-.react-flow-wrapper {
-  flex-grow: 1;
-  background-color: #3F1D38;
-  border-radius: 1rem;
-  height: 70vh;
-  width: 100%;
-}
-
-.path-display {
-  margin-top: 1rem;
-  text-align: center;
-  font-family: 'Fira Code', monospace;
-  color: #3F1D38;
-}
-
-/* Custom Circular Node */
-.react-flow__node.circular-node-wrapper {
-  background: transparent;
-  border: none;
-  padding: 0;
-  width: 50px;
-  height: 50px;
-}
-
-.circular-node-content {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  border: 2px solid #3F1D38;
-  background-color: white;
-  color: #3F1D38;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 14px;
-  font-weight: bold;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-
-.priority-queue-box {
-    background-color: #fff;
-    border-radius: 1rem;
-    padding: 1rem;
-    margin-top: 2rem;
-    width: 100%;
-    color: #3F1D38;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    font-family: 'Fira Code', monospace;
-}
-
-.priority-queue-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-}
-
-.queue-item {
-    background-color: #A2678A;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    min-width: 80px;
-}
-
-.distance {
-    font-weight: bold;
-    color: #F1E8C8;
+.nav-bar .tab-link:hover {
+    color: var(--mauve);
 }
 
 /* Bottom Footer */
-
 .main-footer {
   text-align: center;
   font-size: 0.9rem;
   padding: 1rem;
-  color: #ccc;
-  background-color: #3F1D38;
-  border-top: 1px solid #4D3C77;
+  color: var(--subtext0);
+  background-color: var(--crust);
+  border-top: 1px solid var(--surface0);
   margin-top: 2rem;
 }
 
 .main-footer a {
-
-
-  
-  color: #E19898;
+  color: var(--rosewater);
   text-decoration: none;
 }
 
 .main-footer a:hover {
   text-decoration: underline;
 }
+
+/* Graph Visualizer and other components will go here */
+/* For now, this is kept clean for the sorting page */
